@@ -3,21 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/SEP4/Sauna/app/src/main/res/layout/activity_login.xml" value="0.358695652173913" />
-        <entry key="..\:/SEP4/Sauna/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
-        <entry key="..\:/SEP4/Sauna/app/src/main/res/layout/fragment_sign_in.xml" value="0.36666666666666664" />
-        <entry key="..\:/SEP4/Sauna/app/src/main/res/layout/fragment_sign_out.xml" value="0.36666666666666664" />
-        <entry key="..\:/SEP4/Sauna/app/src/main/res/layout/fragment_sign_up.xml" value="0.35260416666666666" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/activity_login.xml" value="0.11302083333333333" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/activity_start.xml" value="0.10960144927536232" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_profile.xml" value="0.2546875" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_profile2.xml" value="0.2546875" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_sauna.xml" value="0.2546875" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_sign_in.xml" value="0.15572916666666667" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_sign_out.xml" value="0.15104166666666666" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_sign_up.xml" value="0.15104166666666666" />
-        <entry key="..\:/Users/matej/AndroidStudioProjects/Android/app/src/main/res/menu/navigation_menu.xml" value="0.1" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_track_sauna_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_c_o2_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_humidity_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_sauna_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_temperature_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/track_sauna_data.xml" value="0.253125" />
       </map>
     </option>
   </component>
