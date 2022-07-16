@@ -6,17 +6,10 @@
     tools:context="Fragments.TrackCO2Data">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:text="@string/the_graph_below_shows_you_the_current_co2_levels"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.github.mikephil.charting.charts.BarChart>
+        android:layout_height="586dp" />
 
 
 </FrameLayout>
