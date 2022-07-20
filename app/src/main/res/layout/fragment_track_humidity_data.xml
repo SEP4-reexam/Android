@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainLayout"
     tools:context="Fragments.TrackHumidityData">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/the_graph_below_shows_you_the_current_humidity_levels"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        />
+        android:layout_height="586dp" />
 
 </FrameLayout>
