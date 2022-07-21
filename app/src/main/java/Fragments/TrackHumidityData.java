@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 
 import com.and.sauna.R;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -63,6 +64,8 @@ public class TrackHumidityData extends Fragment {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+
+        lineChart.animateX(4000, Easing.EaseInCubic);
         lineChart.invalidate();
 
         lineChart.setDrawGridBackground(true);

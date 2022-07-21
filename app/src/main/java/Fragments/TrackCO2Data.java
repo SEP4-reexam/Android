@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.and.sauna.R;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
@@ -21,7 +23,11 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -30,67 +36,72 @@ import java.util.Objects;
 
 public class TrackCO2Data extends Fragment {
 
-    BarChart barChart;
+    LineChart lineChart;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_track_humidity_data, container, false);
 
-        View view =inflater.inflate(R.layout.fragment_track_c_o2_data, container, false);
+        lineChart = view.findViewById(R.id.line);
 
-        barChart = view.findViewById(R.id.bar);
+        LineDataSet dataSet = new LineDataSet(dataValues(), "Current CO2");
+        LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended CO2");
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(dataSet);
+        dataSets.add(dataSet2);
 
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0f, 7f,"Recommended"));
-        entries.add(new BarEntry(1f, 10f,"Current"));
-        entries.add(new BarEntry(2f, 14f,"Highest"));
+        //Setting the color of the lines and the width of the highlighted values
+        dataSet.setColors(Color.rgb(241, 196, 15));
+        dataSet2.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setValueTextColor(Color.BLUE);
+        dataSet2.setValueTextColor(Color.BLUE);
+        dataSet.setValueTextSize(14f);
+        dataSet2.setValueTextSize(14f);
 
+        //Setting line width and other custom settings
+        dataSet.setLineWidth(4);
+        dataSet2.setLineWidth(4);
+        dataSet.setDrawCircles(true);
+        dataSet2.setDrawCircles(true);
 
-        BarDataSet barDataSet = new BarDataSet(entries, "CO2");
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        barDataSet.setValueTextColor(Color.BLUE);
-        barDataSet.setValueTextSize(18f);
+        LineData data = new LineData(dataSets);
+        lineChart.setData(data);
 
+        lineChart.animateX(4000, Easing.EaseInCubic);
+        lineChart.invalidate();
 
-        ArrayList<String> barFactors = new ArrayList<>();
-        barFactors.add("Recommended");
-        barFactors.add("Current");
-        barFactors.add("Highest");
+        lineChart.setDrawGridBackground(true);
 
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setGranularity(1f);
-        xAxis.setGranularityEnabled(true);
-        BarData data = new BarData(barDataSet);
-        data.setBarWidth(0.9f); // set custom bar width
+        //Setting border width and color
+        lineChart.setBorderWidth(1);
+        lineChart.setDrawBorders(true);
 
+        //Setting the bottom right corner text
         Description description = new Description();
         description.setText("All values in percentages");
         description.setTextSize(15);
-        barChart.setDescription(description);
+        lineChart.setDescription(description);
 
-        //Setting up the borders
-        barChart.setDrawGridBackground(true);
-        barChart.setBorderWidth(1);
-        barChart.setDrawBorders(true);
 
-        barChart.setData(data);
-        barChart.setFitBars(true); // make the x-axis fit exactly all bars
-        barChart.invalidate(); // refresh
-       // barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(barFactors));
+        ArrayList<String> lineFactors = new ArrayList<>();
+        lineFactors.add("Recommended");
+        lineFactors.add("Current");
 
-        //BARCHART LEGEND
-        Legend l = barChart.getLegend();
+        //Setting up the legend
+        Legend l = lineChart.getLegend();
         l.setFormSize(10f); // set the size of the legend forms/shapes
         l.setForm(Legend.LegendForm.CIRCLE); // set what type of form/shape should be used
         l.setTextSize(12f);
         l.setTextColor(Color.BLACK);
         List<LegendEntry> lentries = new ArrayList<>();
 
-        for (int i = 0; i < barFactors.size(); i++) {
+        for (int i = 0; i < lineFactors.size(); i++) {
             LegendEntry entry = new LegendEntry();
             entry.formColor = ColorTemplate.MATERIAL_COLORS[i];
-            entry.label = barFactors.get(i);
+            entry.label = lineFactors.get(i);
             lentries.add(entry);
         }
 
@@ -98,7 +109,29 @@ public class TrackCO2Data extends Fragment {
         l.setYEntrySpace(5f);
         l.setCustom(lentries);
 
+        //lineChart.notifyDataSetChanged();
+
         return view;
+    }
+
+    private ArrayList<Entry> dataValues()
+    {
+        ArrayList<Entry> dataVals = new ArrayList<Entry>();
+        dataVals.add(new Entry(0, 20));
+        dataVals.add(new Entry(1, 24));
+        dataVals.add(new Entry(2, 2));
+        dataVals.add(new Entry(3, 18));
+
+        return dataVals;
+    }
+
+    private ArrayList<Entry> dataValuesRec()
+    {
+        ArrayList<Entry> dataVals = new ArrayList<Entry>();
+        dataVals.add(new Entry(0, 5));
+        dataVals.add(new Entry(2, 10));
+
+        return dataVals;
     }
 
 }
