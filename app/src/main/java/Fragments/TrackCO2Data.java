@@ -1,28 +1,22 @@
 package Fragments;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.and.sauna.R;
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -30,13 +24,21 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import Data.Constants;
+import Data.DatabaseHelper;
+
 
 public class TrackCO2Data extends Fragment {
 
     LineChart lineChart;
+    Button button;
+
+    DatabaseHelper db;
+    long date = System.currentTimeMillis();
 
 
     @Override
@@ -46,32 +48,96 @@ public class TrackCO2Data extends Fragment {
         View view = inflater.inflate(R.layout.fragment_track_humidity_data, container, false);
 
         lineChart = view.findViewById(R.id.line);
+        button = view.findViewById(R.id.btnRefresh);
 
-        LineDataSet dataSet = new LineDataSet(dataValues(), "Current CO2");
+        addDataToGraph();
+        lineChart.invalidate();
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                saveToDatabase();
+//            }
+//        });
+
+
+
+        return view;
+    }
+
+    public void saveToDatabase()
+    {
+        db = new DatabaseHelper(getActivity());
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM");
+        String xValue = simpleDateFormat.format(date);
+
+        String yValue = toString();
+
+        db.saveData(xValue, yValue);
+
+        addDataToGraph();
+        lineChart.invalidate();
+
+        db.close();
+    }
+
+    public void addDataToGraph()
+    {
+        db = new DatabaseHelper(getActivity());
+
+        final ArrayList<Entry> yVals = new ArrayList<Entry>();
+        final ArrayList<String> yData = db.queryYData();
+
+        for (int i = 0; i < db.queryYData().size(); i++)
+        {
+            Entry newEntry= new Entry(i, Float.parseFloat(db.queryYData().get(i)));
+            yVals.add(newEntry);
+        }
+
+        final ArrayList<String> xVals = new ArrayList<String>();
+        final ArrayList<String> xData = db.queryXData();
+
+        for (int i = 0; i < db.queryXData().size(); i++)
+        {
+            xVals.add(xData.get(i));
+        }
+
+        LineDataSet lineDataSet = new LineDataSet(yVals, "Current CO2");
+
+        ArrayList<ILineDataSet> dataSet1 = new ArrayList<>();
+        dataSet1.add(lineDataSet);
+
+        LineData data = new LineData(dataSet1);
+
+        lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
+        lineChart.setData(data);
+
+        //LineDataSet dataSet = new LineDataSet(dataValues(), "Current CO2");
         LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended CO2");
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(dataSet);
-        dataSets.add(dataSet2);
+//        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+//        dataSets.add(lineDataSet);
+//        dataSets.add(dataSet2);
 
         //Setting the color of the lines and the width of the highlighted values
-        dataSet.setColors(Color.rgb(241, 196, 15));
+        lineDataSet.setColors(Color.rgb(241, 196, 15));
         dataSet2.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextColor(Color.BLUE);
+        lineDataSet.setValueTextColor(Color.BLUE);
         dataSet2.setValueTextColor(Color.BLUE);
-        dataSet.setValueTextSize(14f);
+        lineDataSet.setValueTextSize(14f);
         dataSet2.setValueTextSize(14f);
 
         //Setting line width and other custom settings
-        dataSet.setLineWidth(4);
+        lineDataSet.setLineWidth(4);
         dataSet2.setLineWidth(4);
-        dataSet.setDrawCircles(true);
+        lineDataSet.setDrawCircles(true);
         dataSet2.setDrawCircles(true);
 
-        LineData data = new LineData(dataSets);
-        lineChart.setData(data);
+        //LineData data = new LineData(dataSets);
+       // lineChart.setData(data);
 
-        lineChart.animateX(4000, Easing.EaseInCubic);
-        lineChart.invalidate();
+        //Animating line chart
+        lineChart.animateX(3000, Easing.EaseInCubic);
 
         lineChart.setDrawGridBackground(true);
 
@@ -110,21 +176,19 @@ public class TrackCO2Data extends Fragment {
         l.setCustom(lentries);
 
         //lineChart.notifyDataSetChanged();
-
-        return view;
     }
 
-    private ArrayList<Entry> dataValues()
-    {
-        ArrayList<Entry> dataVals = new ArrayList<Entry>();
-        dataVals.add(new Entry(0, 20));
-        dataVals.add(new Entry(1, 24));
-        dataVals.add(new Entry(2, 2));
-        dataVals.add(new Entry(3, 18));
-
-        return dataVals;
-    }
-
+//    private ArrayList<Entry> dataValues()
+//    {
+//        ArrayList<Entry> dataVals = new ArrayList<Entry>();
+//        dataVals.add(new Entry(0, 20));
+//        dataVals.add(new Entry(1, 24));
+//        dataVals.add(new Entry(2, 2));
+//        dataVals.add(new Entry(3, 18));
+//
+//        return dataVals;
+//    }
+//
     private ArrayList<Entry> dataValuesRec()
     {
         ArrayList<Entry> dataVals = new ArrayList<Entry>();

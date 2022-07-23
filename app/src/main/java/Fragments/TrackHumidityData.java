@@ -65,7 +65,7 @@ public class TrackHumidityData extends Fragment {
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
 
-        lineChart.animateX(4000, Easing.EaseInCubic);
+        lineChart.animateX(3000, Easing.EaseInCubic);
         lineChart.invalidate();
 
         lineChart.setDrawGridBackground(true);
