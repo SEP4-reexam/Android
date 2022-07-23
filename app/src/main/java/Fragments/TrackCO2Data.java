@@ -32,7 +32,7 @@ import Data.Constants;
 import Data.DatabaseHelper;
 
 
-public class TrackCO2Data extends Fragment {
+public class TrackCO2Data extends Fragment implements View.OnClickListener {
 
     LineChart lineChart;
     Button button;
@@ -53,16 +53,16 @@ public class TrackCO2Data extends Fragment {
         addDataToGraph();
         lineChart.invalidate();
 
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                saveToDatabase();
-//            }
-//        });
+        button.setOnClickListener(this);
 
 
 
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        saveToDatabase();
     }
 
     public void saveToDatabase()
@@ -197,5 +197,6 @@ public class TrackCO2Data extends Fragment {
 
         return dataVals;
     }
+
 
 }
