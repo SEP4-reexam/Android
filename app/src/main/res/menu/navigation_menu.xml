@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/sauna_group"
+        android:title="Saunas">
+        <menu>
+        <item
+            android:id="@+id/sauna_1"
+            android:title="Sauna #1"
+            android:icon="@drawable/sauna_image"/>
+            <item
+                android:id="@+id/sauna_2"
+                android:title="Sauna #2"
+                android:icon="@drawable/sauna_image"/>
+            <item
+                android:id="@+id/sauna_3"
+                android:title="Sauna #3"
+                android:icon="@drawable/sauna_image"/>
+        </menu>
+
+    </item>
+    <item
+        android:id="@+id/personal_group"
+        android:title="Personal"
+        android:icon="@drawable/other_image">
+        <menu>
+            <item
+                android:id="@+id/navbar_profilebtn"
+                android:title="Profile"
+                android:icon="@drawable/profile_image"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/other_group"
+        android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/about_us"
+                android:title="About Us"/>
+        </menu>
+    </item>
+</menu>
