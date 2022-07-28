@@ -39,6 +39,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+//    public Boolean insertData(float valueX, float valueY)
+//    {
+//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//
+//        contentValues.put("xValues", valueX);
+//        contentValues.put("yValues", valueY);
+//        sqLiteDatabase.insert(Constants.TABLE_NAME, null, contentValues);
+//        return true;
+//    }
+
 
     public void saveData(String valX, String valY)
     {

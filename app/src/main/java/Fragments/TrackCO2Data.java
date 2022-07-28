@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.and.sauna.R;
 import com.github.mikephil.charting.animation.Easing;
@@ -23,22 +25,27 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import Data.Constants;
 import Data.DatabaseHelper;
 
 
-public class TrackCO2Data extends Fragment implements View.OnClickListener {
+public class TrackCO2Data extends Fragment{
 
     LineChart lineChart;
-    Button button;
+  //  FloatingActionButton button;
 
     DatabaseHelper db;
-    long date = System.currentTimeMillis();
+    SQLiteDatabase sqLiteDatabase;
 
 
     @Override
@@ -48,76 +55,102 @@ public class TrackCO2Data extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_track_humidity_data, container, false);
 
         lineChart = view.findViewById(R.id.line);
-        button = view.findViewById(R.id.btnRefresh);
-
         addDataToGraph();
         lineChart.invalidate();
 
-        button.setOnClickListener(this);
+        db = new DatabaseHelper(getActivity());
+        sqLiteDatabase = db.getWritableDatabase();
+
+
 
 
 
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        saveToDatabase();
-    }
-
-    public void saveToDatabase()
-    {
-        db = new DatabaseHelper(getActivity());
-
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM");
-        String xValue = simpleDateFormat.format(date);
-
-        String yValue = toString();
-
-        db.saveData(xValue, yValue);
-
-        addDataToGraph();
-        lineChart.invalidate();
-
-        db.close();
-    }
 
     public void addDataToGraph()
     {
         db = new DatabaseHelper(getActivity());
 
-        final ArrayList<Entry> yVals = new ArrayList<Entry>();
-        final ArrayList<String> yData = db.queryYData();
 
-        for (int i = 0; i < db.queryYData().size(); i++)
-        {
-            Entry newEntry= new Entry(i, Float.parseFloat(db.queryYData().get(i)));
-            yVals.add(newEntry);
-        }
+//        final ArrayList<Entry> yVals = new ArrayList<Entry>();
+     //   final ArrayList<String> yData = db.queryYData();
 
-        final ArrayList<String> xVals = new ArrayList<String>();
-        final ArrayList<String> xData = db.queryXData();
+     //   final ArrayList<String> xVals = new ArrayList<String>();
+       // final ArrayList<String> xData = new ArrayList<String>();
 
-        for (int i = 0; i < db.queryXData().size(); i++)
-        {
-            xVals.add(xData.get(i));
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //add entries
+                for (int i = 0; i < 500; i++) {
+                    {
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
-        LineDataSet lineDataSet = new LineDataSet(yVals, "Current CO2");
+                                yDataValues();
+                                System.out.println(yDataValues());
+                            }
+                        });
+                    }
+
+
+                    //pause between intervals
+                    {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (NegativeArraySizeException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
+
+//        for (int i = 0; i < db.queryYData().size(); i++)
+//        {
+//            //Entry newEntry= new Entry(i, Float.parseFloat(db.queryYData().get(i)));
+//            int max = 30;
+//            int min = 5;
+//            Random rand = new Random();
+//            Entry newEntry = new Entry(i, rand.nextInt((max - min) + 1) + min);
+//            yVals.add(newEntry);
+//            System.out.println(yVals);
+//        }
+
+
+//        for (int i = 0; i < db.queryXData().size(); i++)
+//        {
+//            long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
+//            long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
+//            long diff = end - offset + 1;
+//            Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
+//            xVals.add(rand.toString());
+//            System.out.println(xVals);
+//        }
+
+//        for (int i = 0; i < db.queryXData().size(); i++)
+//        {
+//            xVals.add(xData.get(i));
+//        }
+
+        LineDataSet lineDataSet = new LineDataSet(yDataValues(), "Current CO2");
 
         ArrayList<ILineDataSet> dataSet1 = new ArrayList<>();
         dataSet1.add(lineDataSet);
 
         LineData data = new LineData(dataSet1);
 
-        lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
+    //    lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
         lineChart.setData(data);
 
         //LineDataSet dataSet = new LineDataSet(dataValues(), "Current CO2");
         LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended CO2");
-//        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+       ArrayList<ILineDataSet> dataSetsRec = new ArrayList<>();
 //        dataSets.add(lineDataSet);
-//        dataSets.add(dataSet2);
+        dataSetsRec.add(dataSet2);
 
         //Setting the color of the lines and the width of the highlighted values
         lineDataSet.setColors(Color.rgb(241, 196, 15));
@@ -133,11 +166,11 @@ public class TrackCO2Data extends Fragment implements View.OnClickListener {
         lineDataSet.setDrawCircles(true);
         dataSet2.setDrawCircles(true);
 
-        //LineData data = new LineData(dataSets);
-       // lineChart.setData(data);
+        LineData dataRec = new LineData(dataSetsRec);
+        lineChart.setData(dataRec);
 
         //Animating line chart
-        lineChart.animateX(3000, Easing.EaseInCubic);
+        lineChart.animateX(2000, Easing.EaseInCubic);
 
         lineChart.setDrawGridBackground(true);
 
@@ -176,6 +209,42 @@ public class TrackCO2Data extends Fragment implements View.OnClickListener {
         l.setCustom(lentries);
 
         //lineChart.notifyDataSetChanged();
+    }
+
+
+    private ArrayList<Entry> yDataValues()
+    {
+        final ArrayList<Entry> yVals = new ArrayList<Entry>();
+        for (int i = 0; i < db.queryYData().size(); i++)
+        {
+//            Timestamp timestamp = new Timestamp(new Date().getTime());
+//
+//            // create  instance object
+//            Instant instant
+//                    = Instant.parse(timestamp);
+//
+//            // print Instant Value
+//            System.out.println("Instant: " + instant);
+//
+//            // get epochValue using getEpochSecond
+//            long epochValue = instant.getEpochSecond();
+//
+//            // print results
+//            System.out.println("Java epoch Value: "
+//                    + epochValue);
+//
+            //Entry newEntry= new Entry(i, Float.parseFloat(db.queryYData().get(i)));
+            int max = 30;
+            int min = 5;
+            Random rand = new Random();
+          //  Entry newEntry = new Entry( , rand.nextInt((max - min) + 1) + min);
+            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
+            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
+            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
+            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
+           // System.out.println(yVals);
+        }
+        return yVals;
     }
 
 //    private ArrayList<Entry> dataValues()

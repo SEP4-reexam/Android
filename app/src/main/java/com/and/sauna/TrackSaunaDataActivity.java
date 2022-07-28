@@ -2,32 +2,49 @@ package com.and.sauna;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
+import Data.DatabaseHelper;
 import Fragments.TrackCO2Data;
-import Fragments.TrackHumidityData;
-import Fragments.TrackTemperatureData;
 
-public class MainActivity extends AppCompatActivity {
+public class TrackSaunaDataActivity extends AppCompatActivity {
+
+    FloatingActionButton button;
+
+    DatabaseHelper db;
+    long date = System.currentTimeMillis();
+
+    TrackCO2Data trackCO2Data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_track_sauna_data);
 
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.viewpager);
+
+        button = findViewById(R.id.btnRefresh);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveToDatabase();
+            }
+        });
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
 
@@ -54,5 +71,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).attach();
   }
+
+    public void saveToDatabase()
+    {
+        db = new DatabaseHelper(this);
+
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
+        String xValue = simpleDateFormat.format(date);
+
+        String yValue = toString();
+
+        db.saveData(xValue, yValue);
+
+        trackCO2Data.addDataToGraph();
+
+        db.close();
+    }
+
+
 
     }
