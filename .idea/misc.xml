@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_login.xml" value="0.253125" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_start.xml" value="0.1" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/activity_track_sauna_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_sauna.xml" value="0.253125" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_c_o2_data.xml" value="0.25" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_humidity_data.xml" value="0.253125" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_sauna_data.xml" value="0.253125" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/fragment_track_temperature_data.xml" value="0.253125" />
         <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/layout/track_sauna_data.xml" value="0.253125" />
+        <entry key="..\:/Users/JimAnt/AndroidStudioProjects/Android/app/src/main/res/menu/navigation_menu.xml" value="0.253125" />
       </map>
     </option>
   </component>

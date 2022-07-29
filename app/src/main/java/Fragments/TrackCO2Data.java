@@ -77,37 +77,37 @@ public class TrackCO2Data extends Fragment{
 //        final ArrayList<Entry> yVals = new ArrayList<Entry>();
      //   final ArrayList<String> yData = db.queryYData();
 
-     //   final ArrayList<String> xVals = new ArrayList<String>();
-       // final ArrayList<String> xData = new ArrayList<String>();
+        final ArrayList<String> xVals = new ArrayList<String>();
+        final ArrayList<String> xData = new ArrayList<String>();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //add entries
-                for (int i = 0; i < 500; i++) {
-                    {
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                yDataValues();
-                                System.out.println(yDataValues());
-                            }
-                        });
-                    }
-
-
-                    //pause between intervals
-                    {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (NegativeArraySizeException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                //add entries
+//                for (int i = 0; i < db.queryYData().size(); i++) {
+//                    {
+//                        requireActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//
+//                                yDataValues();
+//                                System.out.println(yDataValues());
+//                            }
+//                        });
+//                    }
+//
+//
+//                    //pause between intervals
+//                    {
+//                        try {
+//                            Thread.sleep(2000);
+//                        } catch (NegativeArraySizeException | InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        }).start();
 
 //        for (int i = 0; i < db.queryYData().size(); i++)
 //        {
@@ -121,15 +121,15 @@ public class TrackCO2Data extends Fragment{
 //        }
 
 
-//        for (int i = 0; i < db.queryXData().size(); i++)
-//        {
-//            long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
-//            long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
-//            long diff = end - offset + 1;
-//            Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
-//            xVals.add(rand.toString());
-//            System.out.println(xVals);
-//        }
+        for (int i = 0; i < db.queryXData().size(); i++)
+        {
+            long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
+            long end = Timestamp.valueOf("2013-01-01 00:00:00").getTime();
+            long diff = end - offset + 1;
+            Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
+            xVals.add(rand.toString());
+            System.out.println(xVals);
+        }
 
 //        for (int i = 0; i < db.queryXData().size(); i++)
 //        {
@@ -138,19 +138,16 @@ public class TrackCO2Data extends Fragment{
 
         LineDataSet lineDataSet = new LineDataSet(yDataValues(), "Current CO2");
 
-        ArrayList<ILineDataSet> dataSet1 = new ArrayList<>();
-        dataSet1.add(lineDataSet);
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(lineDataSet);
 
-        LineData data = new LineData(dataSet1);
+        lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
 
-    //    lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
-        lineChart.setData(data);
 
         //LineDataSet dataSet = new LineDataSet(dataValues(), "Current CO2");
         LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended CO2");
-       ArrayList<ILineDataSet> dataSetsRec = new ArrayList<>();
 //        dataSets.add(lineDataSet);
-        dataSetsRec.add(dataSet2);
+        dataSets.add(dataSet2);
 
         //Setting the color of the lines and the width of the highlighted values
         lineDataSet.setColors(Color.rgb(241, 196, 15));
@@ -166,8 +163,10 @@ public class TrackCO2Data extends Fragment{
         lineDataSet.setDrawCircles(true);
         dataSet2.setDrawCircles(true);
 
-        LineData dataRec = new LineData(dataSetsRec);
-        lineChart.setData(dataRec);
+
+        LineData data = new LineData(dataSets);
+        lineChart.setData(data);
+
 
         //Animating line chart
         lineChart.animateX(2000, Easing.EaseInCubic);
@@ -214,34 +213,51 @@ public class TrackCO2Data extends Fragment{
 
     private ArrayList<Entry> yDataValues()
     {
-        final ArrayList<Entry> yVals = new ArrayList<Entry>();
-        for (int i = 0; i < db.queryYData().size(); i++)
-        {
-//            Timestamp timestamp = new Timestamp(new Date().getTime());
-//
-//            // create  instance object
-//            Instant instant
-//                    = Instant.parse(timestamp);
-//
-//            // print Instant Value
-//            System.out.println("Instant: " + instant);
-//
-//            // get epochValue using getEpochSecond
-//            long epochValue = instant.getEpochSecond();
-//
-//            // print results
-//            System.out.println("Java epoch Value: "
-//                    + epochValue);
-//
+         ArrayList<Entry> yVals = new ArrayList<Entry>();
+
+       for (int i = 0; i < db.queryYData().size(); i++)
+         {
+            Timestamp timestamp = new Timestamp(new Date().getTime());
+
+            // create  instance object
+            Instant instant
+                    = Instant.parse("2018-10-20T16:55:30.00Z");
+
+            // print Instant Value
+            System.out.println("Instant: " + instant);
+
+            // get epochValue using getEpochSecond
+            long epochValue = instant.getEpochSecond();
+
+            // print results
+            System.out.println("Java epoch Value: "
+                    + epochValue);
+
+             // create  instance object
+             Instant instant1
+                     = Instant.parse("2018-11-20T16:55:30.00Z");
+
+             // print Instant Value
+             System.out.println("Instant: " + instant1);
+
+             // get epochValue using getEpochSecond
+             long epochValue1 = instant1.getEpochSecond();
+
+             // print results
+             System.out.println("Java epoch Value: "
+                     + epochValue1);
+
+
             //Entry newEntry= new Entry(i, Float.parseFloat(db.queryYData().get(i)));
             int max = 30;
             int min = 5;
             Random rand = new Random();
           //  Entry newEntry = new Entry( , rand.nextInt((max - min) + 1) + min);
-            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
-            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
-            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
-            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
+            yVals.add(new Entry(epochValue, rand.nextInt((max - min) + 1) + min));
+            yVals.add(new Entry(epochValue1, rand.nextInt((max - min) + 1) + min));
+
+//            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min);
+//            yVals.add(new Entry(rand.nextInt((max - min) + 1) + min, rand.nextInt((max - min) + 1) + min));
            // System.out.println(yVals);
         }
         return yVals;
@@ -260,9 +276,10 @@ public class TrackCO2Data extends Fragment{
 //
     private ArrayList<Entry> dataValuesRec()
     {
-        ArrayList<Entry> dataVals = new ArrayList<Entry>();
-        dataVals.add(new Entry(0, 5));
-        dataVals.add(new Entry(2, 10));
+             ArrayList<Entry> dataVals = new ArrayList<Entry>();
+            dataVals.add(new Entry(0, 60));
+            dataVals.add(new Entry(10, 60));
+
 
         return dataVals;
     }
