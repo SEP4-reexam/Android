@@ -24,9 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String LINECHART_TABLE = "CREATE TABLE " +
                 Constants.TABLE_NAME + " (" +
                 Constants.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Constants.DATE + " STRING, " +
                 Constants.yAXIS + " STRING);";
-
         sqLiteDatabase.execSQL(LINECHART_TABLE);
 
     }
@@ -39,47 +37,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-//    public Boolean insertData(float valueX, float valueY)
-//    {
-//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//
-//        contentValues.put("xValues", valueX);
-//        contentValues.put("yValues", valueY);
-//        sqLiteDatabase.insert(Constants.TABLE_NAME, null, contentValues);
-//        return true;
-//    }
-
-
-    public void saveData(String valX, String valY)
+    public void saveData( String valY)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(Constants.DATE, valX);
         values.put(Constants.yAXIS, valY);
 
         db.insert(Constants.TABLE_NAME, null, values);
-    }
-
-    public ArrayList<String> queryXData()
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<String> xData = new ArrayList<String>();
-
-        String query = "SELECT " + Constants.DATE + " FROM " + Constants.TABLE_NAME + " GROUP BY " + Constants.DATE;
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext())
-        {
-            xData.add(cursor.getString(0));
-        }
-        cursor.close();
-
-        return xData;
     }
 
     public ArrayList<String> queryYData()
@@ -98,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             yData.add(cursor.getString(0));
         }
         cursor.close();
-
+        System.out.println("Size of my peepee: " + yData.size());
         return yData;
     }
 

@@ -23,8 +23,7 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
 
    // FloatingActionButton button;
 
-    DatabaseHelper db;
-    long date = System.currentTimeMillis();
+
 
     TrackCO2Data trackCO2Data;
 
@@ -33,7 +32,7 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_sauna_data);
 
-
+        //saveToDatabase();
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.viewpager);
 
@@ -72,21 +71,7 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
                 }).attach();
   }
 
-    public void saveToDatabase()
-    {
-        db = new DatabaseHelper(this);
 
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss");
-        String xValue = simpleDateFormat.format(date);
-
-        String yValue = toString();
-
-        db.saveData(xValue, yValue);
-
-        trackCO2Data.addDataToGraph();
-
-        db.close();
-    }
 
 
 
