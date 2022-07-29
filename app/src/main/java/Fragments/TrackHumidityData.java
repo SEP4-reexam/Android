@@ -124,7 +124,7 @@ public class TrackHumidityData extends Fragment {
     {
         ArrayList<Entry> dataVals = new ArrayList<Entry>();
         dataVals.add(new Entry(0, 5));
-        dataVals.add(new Entry(2, 10));
+        dataVals.add(new Entry(15, 5));
 
         return dataVals;
     }

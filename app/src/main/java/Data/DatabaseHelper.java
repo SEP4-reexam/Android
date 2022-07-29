@@ -9,10 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.github.mikephil.charting.data.LineData;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    SQLiteDatabase sqLiteDatabase;
 
     public DatabaseHelper(Context context) {
         super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
@@ -37,7 +43,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void saveData( String valY)
+    public void DeleteAllData()
+    {
+
+        String deleteStatement = "DELETE FROM " + Constants.TABLE_NAME ;
+        sqLiteDatabase.execSQL(deleteStatement);
+    }
+
+    public void saveData(String valY)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -65,7 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             yData.add(cursor.getString(0));
         }
         cursor.close();
-        System.out.println("Size of my peepee: " + yData.size());
+        System.out.println("Size of yData - DBHelper: " + yData.size());
+        System.out.println(yData.get(10));
         return yData;
     }
 

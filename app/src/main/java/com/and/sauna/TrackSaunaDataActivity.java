@@ -21,8 +21,8 @@ import Fragments.TrackCO2Data;
 
 public class TrackSaunaDataActivity extends AppCompatActivity {
 
-   // FloatingActionButton button;
-
+    FloatingActionButton button;
+    DatabaseHelper db = new DatabaseHelper(this);
 
 
     TrackCO2Data trackCO2Data;
@@ -36,14 +36,14 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.viewpager);
 
-//        button = findViewById(R.id.btnRefresh);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                saveToDatabase();
-//            }
-//        });
+        button = findViewById(R.id.refreshBtn);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               db.DeleteAllData();
+            }
+        });
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
 
