@@ -5,24 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.text.SimpleDateFormat;
-
-import Data.DatabaseHelper;
 import Fragments.TrackCO2Data;
 
 public class TrackSaunaDataActivity extends AppCompatActivity {
 
     FloatingActionButton button;
-    DatabaseHelper db = new DatabaseHelper(this);
 
 
     TrackCO2Data trackCO2Data;
@@ -41,7 +35,7 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               db.DeleteAllData();
+
             }
         });
 
@@ -70,9 +64,6 @@ public class TrackSaunaDataActivity extends AppCompatActivity {
                     }
                 }).attach();
   }
-
-
-
 
 
     }
