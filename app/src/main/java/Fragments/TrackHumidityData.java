@@ -27,12 +27,16 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class TrackHumidityData extends Fragment {
 
     LineChart lineChart;
-
+    ArrayList<Entry> dataVals = new ArrayList<Entry>();
+    int max = 100;
+    int min = 0;
+    Random rand = new Random();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,31 +47,34 @@ public class TrackHumidityData extends Fragment {
         lineChart = view.findViewById(R.id.line);
 
         LineDataSet dataSet = new LineDataSet(dataValues(), "Current Humidity");
-        LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended Humidity");
+        //LineDataSet dataSet2 = new LineDataSet(dataValuesRec(), "Recommended Humidity");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(dataSet);
-        dataSets.add(dataSet2);
+        //dataSets.add(dataSet2);
 
+        dataVals.add(new Entry(0, rand.nextInt((max - min) + 1) + min));
         //Setting the color of the lines and the width of the highlighted values
         dataSet.setColors(Color.rgb(241, 196, 15));
-        dataSet2.setColors(ColorTemplate.MATERIAL_COLORS);
+        //dataSet2.setColors(ColorTemplate.MATERIAL_COLORS);
         dataSet.setValueTextColor(Color.BLUE);
-        dataSet2.setValueTextColor(Color.BLUE);
+        //dataSet2.setValueTextColor(Color.BLUE);
         dataSet.setValueTextSize(14f);
-        dataSet2.setValueTextSize(14f);
+        //dataSet2.setValueTextSize(14f);
 
         //Setting line width and other custom settings
         dataSet.setLineWidth(4);
-        dataSet2.setLineWidth(4);
+        //dataSet2.setLineWidth(4);
         dataSet.setDrawCircles(true);
-        dataSet2.setDrawCircles(true);
+        //dataSet2.setDrawCircles(true);
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
 
         lineChart.animateX(3000, Easing.EaseInCubic);
-        lineChart.invalidate();
 
+        data.notifyDataChanged();
+        lineChart.notifyDataSetChanged();
+        lineChart.invalidate();
         lineChart.setDrawGridBackground(true);
 
         //Setting border width and color
@@ -105,28 +112,74 @@ public class TrackHumidityData extends Fragment {
         l.setCustom(lentries);
 
         //lineChart.notifyDataSetChanged();
+        NewEntry();
 
         return view;
     }
 
+    public void NewEntry()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //add entries
+                for (int i = 0; i < 25; i++) {
+                    {
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dataValues();
+                            }
+                        });
+                    }
+                    //pause between intervals
+                    {
+                        try {
+                            Thread.sleep(600);
+                        } catch (NegativeArraySizeException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }).start();
+    }
+
+
+    int t = 0;
     private ArrayList<Entry> dataValues()
     {
-        ArrayList<Entry> dataVals = new ArrayList<Entry>();
-        dataVals.add(new Entry(0, 20));
-        dataVals.add(new Entry(1, 24));
-        dataVals.add(new Entry(2, 2));
-        dataVals.add(new Entry(3, 18));
+        t+=5;
+        int random = rand.nextInt((max - min) + 1) + min;
+        dataVals.add(new Entry(t, random));
+       //}
+//        dataVals.add(new Entry(1, 24));
+//        dataVals.add(new Entry(2, 2));
+//        dataVals.add(new Entry(3, 18));
+//        dataVals.add(new Entry(4, 20));
+//        dataVals.add(new Entry(5, 24));
+//        dataVals.add(new Entry(6, 2));
+//        dataVals.add(new Entry(7, 18));
+//        dataVals.add(new Entry(8, 24));
+//        dataVals.add(new Entry(9, 2));
+//        dataVals.add(new Entry(10, 18));
+//        dataVals.add(new Entry(11, 24));
+//        dataVals.add(new Entry(12, 2));
+//        dataVals.add(new Entry(13, 18));
+//        dataVals.add(new Entry(14, 20));
+//        dataVals.add(new Entry(15, 20));
+        System.out.println("DATA VALUES: " + dataVals);
 
         return dataVals;
     }
 
-    private ArrayList<Entry> dataValuesRec()
-    {
-        ArrayList<Entry> dataVals = new ArrayList<Entry>();
-        dataVals.add(new Entry(0, 5));
-        dataVals.add(new Entry(15, 5));
-
-        return dataVals;
-    }
+//    private ArrayList<Entry> dataValuesRec()
+//    {
+//        ArrayList<Entry> dataVals = new ArrayList<Entry>();
+//        dataVals.add(new Entry(0, 5));
+//        dataVals.add(new Entry(15, 5));
+//
+//        return dataVals;
+//    }
 
 }

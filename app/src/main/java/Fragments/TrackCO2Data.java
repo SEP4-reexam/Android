@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.and.sauna.R;
+import com.and.sauna.networking.SaunaDataAPI;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -40,6 +41,9 @@ import java.util.concurrent.TimeUnit;
 import Data.MeasurementsData;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class TrackCO2Data extends Fragment{
@@ -49,6 +53,8 @@ public class TrackCO2Data extends Fragment{
     // The XAxis MUST be mapped to a timestamp of the current time (local timestamp)
 
     Date localTime = Calendar.getInstance().getTime();
+    String BASE_URL = "localhost:8090/";
+    SaunaDataAPI saunaDataAPI;
 
     LineChart lineChart;
 
@@ -60,9 +66,23 @@ public class TrackCO2Data extends Fragment{
 
         lineChart = view.findViewById(R.id.line);
         addDataToGraph();
+        setupApi();
         CurrentDataValues(10, 20);
 
         return view;
+    }
+
+    private void setupApi() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.level(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        saunaDataAPI = new retrofit2.Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(SaunaDataAPI.class);
     }
 
 
@@ -164,6 +184,10 @@ public class TrackCO2Data extends Fragment{
 
     float to = now + count;
 
+//    SaunaDataAPI.getHistoricalData(
+//
+//    )
+
 
     ArrayList<Entry> values = new ArrayList<Entry>();
         ArrayList<Entry> dataVals = new ArrayList<Entry>();
@@ -186,11 +210,6 @@ public class TrackCO2Data extends Fragment{
 //        }
         LineDataSet lineDataSet =  new LineDataSet(values, "Current CO2");
 
-
-
-
-
-
         LineDataSet dataSet2 = new LineDataSet(dataVals, "Recommended CO2");
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -208,11 +227,6 @@ public class TrackCO2Data extends Fragment{
         //Setting line width and other custom settings
         dataSet2.setLineWidth(4);
         dataSet2.setDrawCircles(true);
-
-
-
-
-
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
@@ -241,26 +255,6 @@ public class TrackCO2Data extends Fragment{
 
     private void dataValuesRec()
     {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       //  return dataVals;
     }

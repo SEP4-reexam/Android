@@ -100,7 +100,6 @@ public class TrackTemperatureData extends Fragment {
         l.setCustom(lentries);
 
         //lineChart.notifyDataSetChanged();
-
         return view;
     }
 
